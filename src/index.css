@@ -1,5 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;700&display=swap");
-body {
-  margin: 0;
+
+/* html {
   box-sizing: border-box;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+body {
+  overflow-x: hidden;
+} */
+
+/*tener en cuenta que el root tiene un padding de 2rem*/
+/* #root {
+  padding: 0;
+} */

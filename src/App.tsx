@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { Button, Container } from "@mui/material";
-
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
+import { AppRouter } from "./AppRouter";
 
 function App() {
   return (
-    <Container maxWidth="xl">
-      <Button variant="contained">Hola mundo</Button>
-    </Container>
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   );
 }
 
