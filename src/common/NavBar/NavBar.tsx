@@ -8,6 +8,7 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 // export function NavBar() {
 //   return (
@@ -55,7 +56,9 @@ export const NavBar: React.FunctionComponent<{}> = () => {
               </Grid>
               <Grid item>
                 <Stack spacing={2} direction="row">
-                  <Button variant="outlined">Login</Button>
+                  <Link to="/login">
+                    <Button variant="outlined">Login</Button>
+                  </Link>
                   <Button variant="contained">Register</Button>
                 </Stack>
               </Grid>
