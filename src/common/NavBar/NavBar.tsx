@@ -8,7 +8,6 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 
 // export function NavBar() {
 //   return (
@@ -38,11 +37,12 @@ import { Link } from "react-router-dom";
 //     </Box>
 //   );
 // }
-
+import { useNavigate } from "react-router-dom";
 export const NavBar: React.FunctionComponent<{}> = () => {
+  const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="sticky">
         <Toolbar>
           <Container maxWidth="xl">
             <Grid
@@ -56,9 +56,10 @@ export const NavBar: React.FunctionComponent<{}> = () => {
               </Grid>
               <Grid item>
                 <Stack spacing={2} direction="row">
-                  <Link to="/login">
-                    <Button variant="outlined">Login</Button>
-                  </Link>
+                  <Button variant="outlined" onClick={() => navigate("login")}>
+                    Login
+                  </Button>
+
                   <Button variant="contained">Register</Button>
                 </Stack>
               </Grid>
