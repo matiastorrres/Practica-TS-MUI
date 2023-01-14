@@ -1,8 +1,10 @@
-import { Container, Button } from "@mui/material";
-import { useContext, MouseEvent, useEffect } from "react";
-import { character } from "../../api/character";
+import { Container, Button, Box, Grid, Pagination } from "@mui/material";
+import { useContext, MouseEvent, useEffect, useState } from "react";
+import { characters } from "../../api/character";
 import { HeaderComponent } from "../../components";
+import { CardComponent } from "../../components/CardComponents/CardComponent";
 import { NotificationContex } from "../../context/NotificationContext";
+import { TypeCharacter } from "./interface/character.interface";
 
 // import { useNotification } from "../../context/NotificationContext";
 
@@ -30,14 +32,32 @@ import { NotificationContex } from "../../context/NotificationContext";
 
 export default function Home() {
   const context = useContext(NotificationContex);
+  const [allCharacters, setAllCharacters] = useState<TypeCharacter[] | null>(
+    null
+  );
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [count, setcount] = useState(1);
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   useEffect(() => {
+    setLoading(true);
     try {
-      character.getAll(2).then((res) => console.log(res.data.results));
+      characters
+        .getAll(page)
+        .then((res) => {
+          setAllCharacters(res.data.results);
+          setcount(res.data.info.pages);
+        })
+        .then(() => setLoading(false));
     } catch (error) {
       console.log(error);
+      console.log(error);
     }
-  }, []);
+  }, [page]);
 
   // const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
   //   console.log(e.currentTarget.name);
@@ -45,6 +65,7 @@ export default function Home() {
   //   if (e.currentTarget.name === "alert") context?.getSucces("alert");
   // };
 
+  if (loading) return <>Cargando</>;
   return (
     <Container maxWidth="xl">
       {/* <Button variant="contained" onClick={handleClick} name="error">
@@ -62,6 +83,43 @@ export default function Home() {
           </Button>
         }
       />
+      <>
+        {allCharacters?.length !== 0 ? (
+          <Box>
+            <Grid container spacing={2}>
+              {allCharacters?.map((el) => (
+                <Grid item key={el.id} xs={3}>
+                  <CardComponent
+                    id={el.id}
+                    image={el.image}
+                    species={el.species}
+                    name={el.name}
+                    status={el.status}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        ) : (
+          <Box>No hay datos</Box>
+        )}
+        <Box
+          sx={{
+            width: "100vw",
+            display: "flex",
+            justifyContent: "center",
+            mb: "2rem",
+          }}
+        >
+          <Pagination
+            count={count}
+            page={page}
+            onChange={handleChange}
+            variant="outlined"
+            color="primary"
+          />
+        </Box>
+      </>
     </Container>
   );
 }
