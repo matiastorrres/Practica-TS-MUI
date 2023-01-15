@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import { RouterLayout } from "./common/Router/RouterLayout";
-import CharacterPage from "./page/CharacterPage/CharacterPage";
-import Home from "./page/Home";
-import Login from "./page/Login";
+import { Home, Login, CharacterPage } from "./page";
+// import CharacterPage from "./page/CharacterPage/CharacterPage";
+// import Login from "./page/Login";
 export function AppRouter() {
   return (
     <Routes>

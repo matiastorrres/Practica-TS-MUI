@@ -30,7 +30,7 @@ import { TypeCharacter } from "./interface/character.interface";
 //   );
 // }
 
-export default function Home() {
+export function Home() {
   const context = useContext(NotificationContex);
   const [allCharacters, setAllCharacters] = useState<TypeCharacter[] | null>(
     null
