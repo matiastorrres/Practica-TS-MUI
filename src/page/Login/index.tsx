@@ -10,6 +10,7 @@ import {
 import { ChangeEvent, FormEvent, useState, useContext } from "react";
 import { NotificationContex } from "../../context/NotificationContext";
 import { loginValidate } from "../../utilities/vaidateForm";
+import { useFormik } from "formik";
 // Paper nos permite darle un color con un contraste que nos permite identificar la caja,
 //por ej si tenemos un fondo de color oscuro, el background del paper va a tener un color similar, pero va a resaltar.
 
@@ -19,31 +20,43 @@ type LoginType = {
 };
 
 export default function Login() {
+  /* ESTO ES SOLO APLICANDO YUP*/
   const context = useContext(NotificationContex);
-  const [loginData, setLoginData] = useState<LoginType>({
-    username: "",
-    password: "",
-  });
-  const dataLogin = (e: ChangeEvent<HTMLInputElement>) => {
-    setLoginData({ ...loginData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    console.log(loginData);
-    loginValidate
-      .validate(loginData)
-      .then(() => {
-        context?.getSucces(JSON.stringify(loginData));
-      })
-      .catch((error) => {
-        context?.getError(JSON.stringify(error.message));
-      });
+  // const [loginData, setLoginData] = useState<LoginType>({
+  //   username: "",
+  //   password: "",
+  // });
+  // const dataLogin = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setLoginData({ ...loginData, [e.target.name]: e.target.value });
+  // };
+  // const handleSubmit = (e: FormEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   console.log(loginData);
+  //   loginValidate
+  //     .validate(loginData)
+  //     .then(() => {
+  //       context?.getSucces(JSON.stringify(loginData));
+  //     })
+  //     .catch((error) => {
+  //       context?.getError(JSON.stringify(error.message));
+  //     });
 
-    setLoginData({
+  //   setLoginData({
+  //     username: "",
+  //     password: "",
+  //   });
+  // };
+  /*ESTO ES APLICANDO FORMIK Y YUP*/
+  const formik = useFormik<LoginType>({
+    initialValues: {
       username: "",
       password: "",
-    });
-  };
+    },
+    validationSchema: loginValidate,
+    onSubmit: (values: LoginType) => {
+      context?.getSucces(JSON.stringify(values));
+    },
+  });
   return (
     <Container maxWidth="sm">
       <Grid
@@ -56,15 +69,19 @@ export default function Login() {
         <Grid item>
           <Paper sx={{ p: "1.2rem", borderRadius: "0.5rem" }}>
             <Typography variant="h5">Iniciar sesion</Typography>
-            <Box component="form" onSubmit={handleSubmit}>
+            <Box component="form" onSubmit={formik.handleSubmit}>
               <TextField
                 fullWidth
                 label="email"
                 sx={{ mt: 2, mb: 1.5 }}
                 // required
                 name="username"
-                onChange={dataLogin}
-                value={loginData.username}
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.username && Boolean(formik.errors.username)
+                }
+                helperText={formik.touched.username && formik.errors.username}
               />
               <TextField
                 fullWidth
@@ -73,8 +90,12 @@ export default function Login() {
                 // required
                 type="password"
                 name="password"
-                onChange={dataLogin}
-                value={loginData.password}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
               />
               <Button
                 type="submit"
