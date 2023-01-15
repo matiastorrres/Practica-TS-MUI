@@ -7,6 +7,8 @@ import {
   Button,
   Typography,
   Stack,
+  Badge,
+  Card,
 } from "@mui/material";
 
 // export function NavBar() {
@@ -38,7 +40,17 @@ import {
 //   );
 // }
 import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CartComponent from "../CartComponent/CartComponent";
+import { useState } from "react";
+import { useAppSelector } from "../../redux/hooks";
+
 export const NavBar: React.FunctionComponent<{}> = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const handleStateViewDrawer = () => {
+    setOpen((state) => !state);
+  };
+  const chatactersCart = useAppSelector((state) => state.cartReducer);
   const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -54,12 +66,20 @@ export const NavBar: React.FunctionComponent<{}> = () => {
               <Grid item>
                 <Typography>Practica</Typography>
               </Grid>
+
               <Grid item>
-                <Stack spacing={2} direction="row">
+                <Stack spacing={3} direction="row">
+                  <Button color="primary" onClick={handleStateViewDrawer}>
+                    <Badge
+                      color="secondary"
+                      badgeContent={chatactersCart.length}
+                    >
+                      <ShoppingCartIcon />
+                    </Badge>
+                  </Button>
                   <Button variant="outlined" onClick={() => navigate("login")}>
                     Login
                   </Button>
-
                   <Button variant="contained">Register</Button>
                 </Stack>
               </Grid>
@@ -67,6 +87,10 @@ export const NavBar: React.FunctionComponent<{}> = () => {
           </Container>
         </Toolbar>
       </AppBar>
+      <CartComponent
+        open={open}
+        handleStateViewDrawer={handleStateViewDrawer}
+      />
     </Box>
   );
 };
